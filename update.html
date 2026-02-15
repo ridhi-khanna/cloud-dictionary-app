@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add / Update Word - Dictionary</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #E6F0FA;
+      text-align: center;
+      padding: 50px;
+      color: #333;
+    }
+
+    .heading-box {
+      display: block;
+      padding: 20px 40px;
+      border: 3px solid #1F3A93;
+      border-radius: 12px;
+      margin: 0 auto 15px auto;
+      background-color: #fff;
+      width: fit-content;
+    }
+
+    h2 {
+      font-size: 28px;
+      margin: 0;
+    }
+
+    .nav-box {
+      display: block;
+      padding: 20px 30px;
+      border: 3px solid #1F3A93;
+      border-radius: 12px;
+      margin: 0 auto 40px auto;
+      background-color: #fff;
+      width: fit-content;
+    }
+
+    .nav-box a {
+      padding: 12px 25px;
+      margin: 5px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 16px;
+      color: white;
+      background-color: #2978B5;
+      transition: background 0.3s;
+      display: inline-block;
+    }
+
+    .nav-box a:hover {
+      background-color: #1F5A87;
+    }
+
+    input, textarea {
+      padding: 12px;
+      width: 280px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 8px 0;
+      outline: none;
+    }
+
+    textarea {
+      height: 70px;
+      resize: none;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #50C878;
+    }
+
+    button {
+      padding: 12px 25px;
+      font-size: 16px;
+      border-radius: 8px;
+      background-color: #2978B5;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1F5A87;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="heading-box">
+    <h2>Add / Update Word</h2>
+  </div>
+
+  <div class="nav-box">
+    <a href="add.html">Add Word</a>
+    <a href="index.html">Search</a>
+    <a href="update.html">Update</a>
+    <a href="delete.html">Delete</a>
+  </div>
+
+  <div>
+    <input type="text" id="wordBox" placeholder="Word" /><br/>
+    <input type="text" id="meaningBox" placeholder="Meaning" /><br/>
+    <textarea id="exampleBox" placeholder="Example (optional)"></textarea><br/>
+    <button id="saveBtn">Save Word</button>
+  </div>
+
+  <div class="message" id="statusMsg"></div>
+
+  <script>
+    const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
+    const wordBox = document.getElementById('wordBox');
+    const meaningBox = document.getElementById('meaningBox');
+    const exampleBox = document.getElementById('exampleBox');
+    const statusMsg = document.getElementById('statusMsg');
+    let isExistingWord = false;
+
+    wordBox.addEventListener('blur', function() {
+      const word = wordBox.value.trim();
+      if (!word) return;
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("GET", API_URL + "/readWord?word=" + encodeURIComponent(word) + "&_=" + new Date().getTime(), true);
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            const data = JSON.parse(xhr.responseText);
+            if (data.length > 0) {
+              meaningBox.value = data[0].meaning || '';
+              exampleBox.value = data[0].example || '';
+              statusMsg.style.color = "#50C878";
+              statusMsg.textContent = "Word exists. You can update it.";
+              isExistingWord = true;
+            } else {
+              meaningBox.value = '';
+              exampleBox.value = '';
+              statusMsg.style.color = "#2978B5";
+              statusMsg.textContent = "New word. Fill in details to add it.";
+              isExistingWord = false;
+            }
+          } else {
+            statusMsg.style.color = "#FC5A8D";
+            statusMsg.textContent = "Error checking word.";
+          }
+        }
+      };
+      xhr.send();
+    });
+
+    function saveWord() {
+      const word = wordBox.value.trim();
+      const meaning = meaningBox.value.trim();
+      const example = exampleBox.value.trim();
+
+      if (!word || !meaning) {
+        statusMsg.style.color = "#FC5A8D";
+        statusMsg.textContent = "Word and meaning are required!";
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open('PUT', API_URL + "/updateWord", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            statusMsg.style.color = "#50C878";
+            statusMsg.textContent = isExistingWord ? "Word updated successfully!" : "New word added!";
+            isExistingWord = true;
+          } else {
+            statusMsg.style.color = "#FC5A8D";
+            statusMsg.textContent = "Error saving word!";
+          }
+        }
+      };
+
+      xhr.send(JSON.stringify({ word, meaning, example }));
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', saveWord);
+  </script>
+
+</body>
+</html>
