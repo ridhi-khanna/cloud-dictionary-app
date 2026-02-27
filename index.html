@@ -144,38 +144,39 @@
   <pre id="out"></pre>
 
   <script>
-    function search() {
-      var w = document.getElementById("word").value;
-      var results = document.getElementById("out");
-      results.textContent = "Searching...";
+function search() {
+  var w = document.getElementById("word").value.trim();
+  var results = document.getElementById("out");
 
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1/readWord?word=" + encodeURIComponent(w), true);
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
-            try {
-              var data = JSON.parse(xhr.responseText);
-              results.textContent = "";
-              if (data.length === 0) {
-                results.textContent = "No results found.";
-              } else {
-                for (var i = 0; i < data.length; i++) {
-                  var item = data[i];
-                  results.textContent += item.word + ": " + item.meaning + " (Example: " + item.example + ")\n\n";
-                }
-              }
-            } catch(e) {
-              results.textContent = "Error parsing response.";
-            }
-          } else {
-            results.textContent = "Error: " + xhr.status;
-          }
+  if (!w) {
+    results.textContent = "Please enter a word.";
+    return;
+  }
+
+  results.textContent = "Searching...";
+
+  fetch("https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1/readWord?word=" + encodeURIComponent(w))
+    .then(async response => {
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.word && data.meaning) {
+          results.textContent =
+            "Word: " + data.word + "\n\n" +
+            "Meaning: " + data.meaning;
+        } else {
+          results.textContent = JSON.stringify(data, null, 2);
         }
-      };
-      xhr.send();
-    }
-  </script>
+      } else {
+        results.textContent = data.message || "Error occurred.";
+      }
+    })
+    .catch(error => {
+      results.textContent = "Network error.";
+      console.error(error);
+    });
+}
+</script>
 
 </body>
 </html>
