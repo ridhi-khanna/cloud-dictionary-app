@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Add / Update Word - Dictionary</title>
@@ -57,7 +58,8 @@
       background-color: #1F5A87;
     }
 
-    input, textarea {
+    input,
+    textarea {
       padding: 12px;
       width: 280px;
       font-size: 16px;
@@ -72,7 +74,8 @@
       resize: none;
     }
 
-    input:focus, textarea:focus {
+    input:focus,
+    textarea:focus {
       border-color: #50C878;
     }
 
@@ -112,9 +115,9 @@
   </div>
 
   <div>
-    <input type="text" id="wordBox" placeholder="Word" /><br/>
-    <input type="text" id="meaningBox" placeholder="Meaning" /><br/>
-    <textarea id="exampleBox" placeholder="Example (optional)"></textarea><br/>
+    <input type="text" id="wordBox" placeholder="Word" /><br />
+    <input type="text" id="meaningBox" placeholder="Meaning" /><br />
+    <textarea id="exampleBox" placeholder="Example (optional)"></textarea><br />
     <button id="saveBtn">Save Word</button>
   </div>
 
@@ -128,19 +131,19 @@
     const statusMsg = document.getElementById('statusMsg');
     let isExistingWord = false;
 
-    wordBox.addEventListener('blur', function() {
+    wordBox.addEventListener('blur', function () {
       const word = wordBox.value.trim();
       if (!word) return;
 
       const xhr = new XMLHttpRequest();
       xhr.open("GET", API_URL + "/readWord?word=" + encodeURIComponent(word) + "&_=" + new Date().getTime(), true);
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             const data = JSON.parse(xhr.responseText);
-            if (data.length > 0) {
-              meaningBox.value = data[0].meaning || '';
-              exampleBox.value = data[0].example || '';
+            if (data.word) {
+              meaningBox.value = data.meaning || '';
+              exampleBox.value = data.example || '';
               statusMsg.style.color = "#50C878";
               statusMsg.textContent = "Word exists. You can update it.";
               isExistingWord = true;
@@ -175,11 +178,11 @@
       xhr.open('PUT', API_URL + "/updateWord", true);
       xhr.setRequestHeader("Content-Type", "application/json");
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             statusMsg.style.color = "#50C878";
-            statusMsg.textContent = "Word updated successfully!";
+            statusMsg.textContent = isExistingWord ? "Word updated successfully!": "New word added!";
             isExistingWord = true;
           } else {
             statusMsg.style.color = "#FC5A8D";
@@ -195,4 +198,5 @@
   </script>
 
 </body>
+
 </html>
