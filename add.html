@@ -135,7 +135,7 @@
 
       xhr.onreadystatechange = function() {
         if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
+          if (xhr.status === 200 || xhr.status === 201) {
             status.style.color = "#50C878";
             status.textContent = "Word added successfully!";
             document.getElementById('word').value = '';
