@@ -163,7 +163,8 @@ function search() {
         if (data.word && data.meaning) {
           results.textContent =
             "Word: " + data.word + "\n\n" +
-            "Meaning: " + data.meaning;
+            "Meaning: " + data.meaning + "\n\n" +
+            "\example: " + (data.example || "No example available");
         } else {
           results.textContent = JSON.stringify(data, null, 2);
         }
