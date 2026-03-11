@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
   <title>Delete Word - Dictionary</title>
@@ -75,7 +76,8 @@
       padding: 12px 25px;
       font-size: 16px;
       border-radius: 8px;
-      background-color: #FC5A8D; /* strawberry red for delete */
+      background-color: #FC5A8D;
+      /* strawberry red for delete */
       color: white;
       border: none;
       cursor: pointer;
@@ -107,7 +109,7 @@
   </div>
 
   <div>
-    <input type="text" id="wordBox" placeholder="Enter word to delete" /><br/>
+    <input type="text" id="wordBox" placeholder="Enter word to delete" /><br />
     <button id="deleteBtn">Delete Word</button>
   </div>
 
@@ -131,9 +133,11 @@
       }
 
       const xhr = new XMLHttpRequest();
-      xhr.open("DELETE", API_URL + "/deleteWord?word=" + encodeURIComponent(word), true);
+      xhr.open("DELETE", API_URL + "/deleteWord", true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.send(JSON.stringify({ word }));
 
-      xhr.onreadystatechange = function() {
+      xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             const res = JSON.parse(xhr.responseText);
@@ -153,4 +157,5 @@
   </script>
 
 </body>
+
 </html>
