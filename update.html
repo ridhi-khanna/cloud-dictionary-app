@@ -139,6 +139,7 @@
 
       const xhr = new XMLHttpRequest();
       xhr.open("GET", API_URL + "/readWord?word=" + encodeURIComponent(word) + "&_=" + new Date().getTime(), true);
+      xhr.setRequestHeader("Authorization", "Bearer " + idToken);
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
