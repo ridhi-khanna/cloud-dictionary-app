@@ -123,6 +123,8 @@
 
   <div class="message" id="statusMsg"></div>
 
+  <script src="auth.js"></script>
+
   <script>
     const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
     const wordBox = document.getElementById('wordBox');
@@ -177,6 +179,7 @@
       const xhr = new XMLHttpRequest();
       xhr.open('PUT', API_URL + "/updateWord", true);
       xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.setRequestHeader("Authorization", "Bearer " + idToken);
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
