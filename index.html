@@ -162,7 +162,7 @@ function search() {
   fetch("https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1/readWord?word=" + encodeURIComponent(w), {
     method: "GET",
     headers:{
-      "Authorization": token
+      "Authorization": "Bearer" + idToken
     }
   })
     .then(async response => {
