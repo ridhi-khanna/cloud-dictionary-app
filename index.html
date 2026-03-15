@@ -150,7 +150,7 @@ function search() {
   var w = document.getElementById("word").value.trim();
   var results = document.getElementById("out");
 
-  const token= localstorage.getItem("idToken");
+  const token= localStorage.getItem("idToken");
 
   if (!w) {
     results.textContent = "Please enter a word.";
