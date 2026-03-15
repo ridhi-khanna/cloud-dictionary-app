@@ -9,10 +9,9 @@ const REDIRECT_URI = "https://ridhi-khanna.github.io/cloud-dictionary-app/index.
 function getIdToken() {
     const hash = window.location.hash.substring(1); // remove #
     const params = new URLSearchParams(hash);
-    let token = params.get("id_token") || localStorage.getItem("idToken");
+    let token = params.get("id_token");
 
     if (params.get("id_token")) {
-        localStorage.setItem("idToken", token);  // store for reloads
         window.location.hash = "";               // clean URL
     }
 
