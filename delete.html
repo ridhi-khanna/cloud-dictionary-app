@@ -138,7 +138,7 @@
       xhr.open("DELETE", API_URL + "/deleteWord", true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("Authorization", "Bearer " + idToken);
-      xhr.send(JSON.stringify({ word }));
+      
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -153,7 +153,7 @@
         }
       };
 
-      xhr.send();
+      xhr.send(JSON.stringify({ word }));
     }
 
     document.getElementById('deleteBtn').addEventListener('click', deleteWord);
