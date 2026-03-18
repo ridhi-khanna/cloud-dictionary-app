@@ -147,10 +147,10 @@
 
   <script>
 function search() {
-  var w = document.getElementById("word").value.trim();
+  var w = document.getElementById("word").value.trim().toLowerCase();
   var results = document.getElementById("out");
 
-  const token= localStorage.getItem("idToken");
+  const token= localstorage.getItem("idToken");
 
   if (!w) {
     results.textContent = "Please enter a word.";
@@ -162,7 +162,7 @@ function search() {
   fetch("https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1/readWord?word=" + encodeURIComponent(w), {
     method: "GET",
     headers:{
-      "Authorization": "Bearer " + idToken
+      "Authorization": "Bearer" + idToken
     }
   })
     .then(async response => {

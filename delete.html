@@ -121,7 +121,7 @@
     const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
 
     function deleteWord() {
-      const word = document.getElementById('wordBox').value.trim();
+      const word = document.getElementById('wordBox').value.trim().toLowerCase();
       const statusMsg = document.getElementById('statusMsg');
 
       if (!word) {

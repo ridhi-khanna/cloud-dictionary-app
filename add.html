@@ -121,7 +121,7 @@
     const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
 
     function addWord() {
-      var word = document.getElementById('word').value.trim();
+      var word = document.getElementById('word').value.trim().toLowerCase();
       var meaning = document.getElementById('meaning').value.trim();
       var example = document.getElementById('example').value.trim();
       var status = document.getElementById('status');

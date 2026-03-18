@@ -134,7 +134,7 @@
     let isExistingWord = false;
 
     wordBox.addEventListener('blur', function () {
-      const word = wordBox.value.trim();
+      const word = wordBox.value.trim().toLowerCase();
       if (!word) return;
 
       const xhr = new XMLHttpRequest();
