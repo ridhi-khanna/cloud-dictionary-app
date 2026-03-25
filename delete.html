@@ -92,6 +92,20 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .logout-btn {
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #FC5A8D; /* red */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e04878;
+}
   </style>
 </head>
 
@@ -111,6 +125,7 @@
   <div>
     <input type="text" id="wordBox" placeholder="Enter word to delete" /><br />
     <button id="deleteBtn">Delete Word</button>
+    <button onclick="logout()" class="logout-btn">Logout</button>
   </div>
 
   <div class="message" id="statusMsg"></div>
@@ -121,7 +136,7 @@
     const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
 
     function deleteWord() {
-      const word = document.getElementById('wordBox').value.trim();
+      const word = document.getElementById('wordBox').value.trim().toLowerCase();
       const statusMsg = document.getElementById('statusMsg');
 
       if (!word) {
@@ -138,7 +153,7 @@
       xhr.open("DELETE", API_URL + "/deleteWord", true);
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.setRequestHeader("Authorization", "Bearer " + idToken);
-      xhr.send(JSON.stringify({ word }));
+      
 
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
@@ -153,7 +168,7 @@
         }
       };
 
-      xhr.send();
+      xhr.send(JSON.stringify({ word }));
     }
 
     document.getElementById('deleteBtn').addEventListener('click', deleteWord);

@@ -90,6 +90,20 @@
       margin-top: 20px;
       font-weight: bold;
     }
+    .logout-btn {
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #FC5A8D; /* red */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e04878;
+}
   </style>
 </head>
 
@@ -111,6 +125,7 @@
     <input type="text" id="meaning" placeholder="Meaning" /><br>
     <input type="text" id="example" placeholder="Example (optional)" /><br>
     <button id="addBtn">Add Word</button>
+    <button onclick="logout()" class="logout-btn">Logout</button>
   </div>
 
   <p id="status"></p>
@@ -121,7 +136,7 @@
     const API_URL = 'https://3fs94f0sg8.execute-api.ap-south-1.amazonaws.com/version1';
 
     function addWord() {
-      var word = document.getElementById('word').value.trim();
+      var word = document.getElementById('word').value.trim().toLowerCase();
       var meaning = document.getElementById('meaning').value.trim();
       var example = document.getElementById('example').value.trim();
       var status = document.getElementById('status');

@@ -12,7 +12,7 @@ function getIdToken() {
     let token = params.get("id_token") || localStorage.getItem("idToken");
 
     if (params.get("id_token")) {
-        localStorage.setItem("idToken", token);  // store for reloads
+        localStorage.setItem("idToken", token);
         window.location.hash = "";               // clean URL
     }
 

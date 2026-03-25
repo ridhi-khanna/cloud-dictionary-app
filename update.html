@@ -98,6 +98,21 @@
       margin-top: 20px;
       font-weight: bold;
     }
+
+    .logout-btn {
+  padding: 12px 25px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-color: #FC5A8D; /* red */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.logout-btn:hover {
+  background-color: #e04878;
+}
   </style>
 </head>
 
@@ -119,6 +134,7 @@
     <input type="text" id="meaningBox" placeholder="Meaning" /><br />
     <textarea id="exampleBox" placeholder="Example (optional)"></textarea><br />
     <button id="saveBtn">Save Word</button>
+    <button onclick="logout()" class="logout-btn">Logout</button>
   </div>
 
   <div class="message" id="statusMsg"></div>
@@ -134,11 +150,12 @@
     let isExistingWord = false;
 
     wordBox.addEventListener('blur', function () {
-      const word = wordBox.value.trim();
+      const word = wordBox.value.trim().toLowerCase();
       if (!word) return;
 
       const xhr = new XMLHttpRequest();
       xhr.open("GET", API_URL + "/readWord?word=" + encodeURIComponent(word) + "&_=" + new Date().getTime(), true);
+      xhr.setRequestHeader("Authorization", "Bearer " + idToken);
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
