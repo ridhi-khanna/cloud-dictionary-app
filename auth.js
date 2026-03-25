@@ -18,11 +18,20 @@ function getIdToken() {
 
     return token;
 }
+// Check if token is expired
+function isTokenExpired(token) {
+    if (!token) return true;
+
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const exp = payload.exp * 1000;
+
+    return Date.now() > exp;
+}
 
 let idToken = getIdToken();
 
 // Redirect to Cognito login if no token
-if (!idToken) {
+if (!idToken || isTokenExpired(idToken)) {
     window.location.href = "https://ap-south-1gchn9l0ql.auth.ap-south-1.amazoncognito.com/login?client_id=51kvv1j8nok5fds03533d8pcdp&response_type=token&scope=openid&redirect_uri=https://ridhi-khanna.github.io/cloud-dictionary-app/index.html";
 }
 
